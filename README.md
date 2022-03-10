@@ -6,7 +6,7 @@
 
 **x,y为坐标，z为楼层**
 
-## 接口代码
+## 接口代码（FLASK）
 
 ```python
 @positional_info_bp.route("/position/createNewPS/<int:_psx>/<int:_psy>/<int:_psz>/<_id1>/<int:_ap1>/<_id2>/<int:_ap2>/<"

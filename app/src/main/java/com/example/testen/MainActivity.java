@@ -31,7 +31,7 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 1;
-    private TextView textView,textView1;
+    private TextView textView;
     private EditText editX,editY,editZ;
     private int x,y;
     private Map<String,APInfo> APs;
@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
         Button clearButton = findViewById(R.id.clearButton);
         Button sendButton = findViewById(R.id.sendButton);
         textView = findViewById(R.id.textView);
-        textView1 = findViewById(R.id.editTextZ);
         editX = findViewById(R.id.editTextX);
         editY = findViewById(R.id.editTextY);
         editZ = findViewById(R.id.editTextZ);
@@ -122,7 +121,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 textView.setText("");
-                textView1.setText("");
+                editX.setText("");
+                editY.setText("");
+                editZ.setText("");
                 APList.clear();
                 allAP.clear();
                 APs.clear();
@@ -144,12 +145,18 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         try {
+                            Log.d("myMessage",APList.size()+"" );
+                            Log.d("myMessage",editX.getText()+"");
+                            Log.d("myMessage",editY.getText()+"");
+                            Log.d("myMessage",editZ.getText()+"");
+
                             if(APList.size() < 10 || editX.getText() == null|| editY.getText() == null||editZ.getText() == null){
                                 Looper.prepare();
                                 Toast.makeText(MainActivity.this, x+","+y+"缺少数据",Toast.LENGTH_SHORT).show();
                                 Looper.loop();
                             }else{
-                                String res = connectHttp("http://192.168.3.13:8080/position/createNewPS"+"/"+editX.getText()+"/"+editY.getText()+"/"+editZ.getText()+
+                                //192.168.3.13
+                                String res = connectHttp("http://172.20.10.3:8080/position/createNewPS"+"/"+editX.getText()+"/"+editY.getText()+"/"+editZ.getText()+
                                         "/"+ APList.get(0).getBSSID()+"/"+(-APList.get(0).getLevel()/APList.get(0).getCount())+
                                         "/"+ APList.get(1).getBSSID()+"/"+(-APList.get(1).getLevel()/APList.get(1).getCount())+
                                         "/"+ APList.get(2).getBSSID()+"/"+(-APList.get(2).getLevel()/APList.get(2).getCount())+
@@ -183,7 +190,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }).start();
                 textView.setText("");
-                textView1.setText("");
                 APList.clear();
                 allAP.clear();
                 APs.clear();
@@ -213,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
         int count = 0;
         for (ScanResult scanResult : scanResults) {
             //排除本机热点干扰
-            if(scanResult.SSID.equals("OPPO A95 5G"))continue;
+            if(scanResult.SSID.equals("EDG"))continue;
             System.err.println("count="+count);
             scanBuilder.append("\n设备名："+scanResult.SSID
                     +"\n设备位置："+scanResult.BSSID
@@ -232,7 +238,6 @@ public class MainActivity extends AppCompatActivity {
             if(count >= 10)break;
         }
         textView.setText(scanBuilder);
-        textView1.setText("hasWifi "+scanResults.size());
     }
 
     private void checkPermission() {
